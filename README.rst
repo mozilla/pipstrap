@@ -1,9 +1,8 @@
 ========
 Pipstrap
 ========
-----------------------------------------------------------------
-A small script that can act as a trust root for installing pip 8
-----------------------------------------------------------------
+
+Pipstrap is a small script that acts as a trust root for installing pip 8.
 
 Embed this in your project, and your VCS checkout is all you have to trust. In
 a post-`peep <https://pypi.python.org/pypi/peep/>`_ era, this lets you claw
@@ -12,3 +11,33 @@ your way to a `hash-checking version of pip
 mode>`_, with which you can install the rest of your dependencies safely. All
 it assumes is Python 2.7 or better and *some* version of pip already installed.
 If anything goes wrong, it will exit with a non-zero status code.
+
+Invoke it like this::
+
+    source my-virtual-env/bin/activate
+    python my-project/pipstrap.py
+
+At that point, pinned, hash-checked versions of pip, setuptools, and wheel will
+be installed.
+
+.. note::
+
+    Pipstrap calls ``pip`` via the shell, so whichever environment corresponds
+    to the foremost pip on the ``$PATH`` is the one things will get installed
+    into.
+
+How do I trust this?
+====================
+
+An astute question!
+
+Pipstrap is short; read it. Validate its embedded hashes by downloading from
+various locations (to defeat local MITMs), checking the PGP signature on pip,
+comparing with version-control checkouts of all three packages, and talking
+with friends.
+
+For how long?
+=============
+
+When your OS packages pip 8 or you otherwise get a copy of pip 8 you trust onto
+your servers, you can dispense with Pipstrap.
