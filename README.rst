@@ -34,14 +34,15 @@ An astute question!
 Pipstrap is short; read it. Validate its embedded hashes by downloading from
 various locations (to defeat local MITMs), checking the PGP signature on pip,
 comparing with version-control checkouts of all three packages, and talking
-with friends.
+with friends. Check it into your project, sign your commits, and verify
+signatures on deploy.
 
 Why?
 ====
 
 * get-pip.py is yuckily large to embed, and it hits the network to fetch the
   latest pip, setuptools, and wheel, leaving the question of their genuineness
-  up to HTTPS.
+  up to HTTPS. (Its embedded pip is used only to download those new versions.)
 * Continuing to embed peep just to bootstrap pip 8 is unwieldy, with an extra
   requirements file and a longer-than-necessary script. Plus, now that I've got
   hash-checking into pip, I don't want to continue maintaining a script that
