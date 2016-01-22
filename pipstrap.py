@@ -29,10 +29,9 @@ from subprocess import check_output
 from sys import exit
 from tempfile import mkdtemp
 try:
-    from urllib2 import build_opener, HTTPHandler, HTTPSHandler, HTTPError
+    from urllib2 import build_opener, HTTPHandler, HTTPSHandler
 except ImportError:
     from urllib.request import build_opener, HTTPHandler, HTTPSHandler
-    from urllib.error import HTTPError
 try:
     from urlparse import urlparse
 except ImportError:
