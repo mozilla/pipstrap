@@ -82,7 +82,6 @@ def hashed_download(url, temp, digest):
 
 def main():
     temp = mkdtemp(prefix='pipstrap-')
-    output = '(no output from pip yet)'
     try:
         packages = [
             # Pip has no dependencies, as it vendors everything:
@@ -99,14 +98,13 @@ def main():
         ]
         downloads = [hashed_download(package[0], temp, package[1])
                      for package in packages]
-        output = check_output('pip install --no-index --no-deps -U ' + 
-                                  ' '.join(quote(d) for d in downloads),
-                              shell=True)
+        check_output('pip install --no-index --no-deps -U ' +
+                         ' '.join(quote(d) for d in downloads),
+                     shell=True)
     except HashError as exc:
         print(exc)
-    except Exception as exc:
+    except Exception:
         rmtree(temp)
-        print(output)
         raise
     else:
         rmtree(temp)
