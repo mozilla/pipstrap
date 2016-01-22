@@ -36,6 +36,17 @@ various locations (to defeat local MITMs), checking the PGP signature on pip,
 comparing with version-control checkouts of all three packages, and talking
 with friends.
 
+Why?
+====
+
+* get-pip.py is yuckily large to embed, and it hits the network to fetch the
+  latest pip, setuptools, and wheel, leaving the question of their genuineness
+  up to HTTPS.
+* Continuing to embed peep just to bootstrap pip 8 is unwieldy, with an extra
+  requirements file and a longer-than-necessary script. Plus, now that I've got
+  hash-checking into pip, I don't want to continue maintaining a script that
+  breaks whenever pip's private APIs change.
+
 For how long?
 =============
 
