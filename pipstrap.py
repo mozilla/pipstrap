@@ -95,8 +95,8 @@ def main():
             ('https://pypi.python.org/packages/source/w/wheel/wheel-0.26.0.tar.gz',
              'eaad353805c180a47545a256e6508835b65a8e830ba1093ed8162f19a50a530c')
         ]
-        downloads = [hashed_download(package[0], temp, package[1])
-                     for package in packages]
+        downloads = [hashed_download(url, temp, digest)
+                     for url, digest in packages]
         check_output('pip install --no-index --no-deps -U ' +
                          ' '.join(quote(d) for d in downloads),
                      shell=True)
