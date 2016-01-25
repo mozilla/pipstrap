@@ -37,6 +37,9 @@ comparing with version-control checkouts of all three packages, and talking
 with friends. Check it into your project, sign your commits, and verify
 signatures on deploy.
 
+Also, if you trust me and my key-management practices, you can check any of the
+release tags against my GPG signature.
+
 Why?
 ====
 
@@ -53,3 +56,11 @@ For how long?
 
 When your OS packages pip 8 or you otherwise get a copy of pip 8 you trust onto
 your servers, you can dispense with Pipstrap.
+
+Version History
+===============
+
+1.0
+  * Initial release. Before I signed the release, I verified all 3 embedded
+    hashes from various network locations and the pip one against dstufft's GPG
+    signature.
