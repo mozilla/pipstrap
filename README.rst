@@ -60,6 +60,10 @@ your servers, you can dispense with Pipstrap.
 Version History
 ===============
 
+1.0.1
+  * Make flake8-compliant so you can embed it without having to make exceptions
+    for it.
+
 1.0
   * Initial release. Before I signed the release, I verified all 3 embedded
     hashes from various network locations and the pip one against dstufft's GPG
