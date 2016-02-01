@@ -9,8 +9,9 @@ a post-`peep <https://pypi.python.org/pypi/peep/>`_ era, this lets you claw
 your way to a `hash-checking version of pip
 <https://pip.readthedocs.org/en/stable/reference/pip_install/#hash-checking-
 mode>`_, with which you can install the rest of your dependencies safely. All
-it assumes is Python 2.7 or better and *some* version of pip already installed.
-If anything goes wrong, it will exit with a non-zero status code.
+it assumes is Python 2.7 or better and *some* trustworthy version of pip
+already installed. If anything goes wrong, it will exit with a non-zero status
+code.
 
 Invoke it like this::
 
