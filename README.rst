@@ -9,7 +9,7 @@ a post-`peep <https://pypi.python.org/pypi/peep/>`_ era, this lets you claw
 your way to a `hash-checking version of pip
 <https://pip.readthedocs.org/en/stable/reference/pip_install/#hash-checking-
 mode>`_, with which you can install the rest of your dependencies safely. All
-it assumes is Python 2.7 or better and *some* trustworthy version of pip
+it assumes is Python 2.6 or better and *some* trustworthy version of pip
 already installed. If anything goes wrong, it will exit with a non-zero status
 code.
 
@@ -60,6 +60,10 @@ your servers, you can dispense with Pipstrap.
 
 Version History
 ===============
+
+1.1
+ * Support Python 2.6. I feel so dirty, but Let's Encrypt needs it.
+ * Update to pip 8.0.3, wheel 0.29, and setuptools 20.2.2.
 
 1.0.1
   * Make flake8-compliant so you can embed it without having to make exceptions
