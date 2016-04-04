@@ -61,9 +61,13 @@ your servers, you can dispense with Pipstrap.
 Version History
 ===============
 
+1.1.1
+  * Under Python 2.6 don't pass the CalledProcessError exception the ``output``
+    kwarg, which hasn't been invented yet.
+
 1.1
- * Support Python 2.6. I feel so dirty, but Let's Encrypt needs it.
- * Update to pip 8.0.3, wheel 0.29, and setuptools 20.2.2.
+  * Support Python 2.6. I feel so dirty, but Let's Encrypt needs it.
+  * Update to pip 8.0.3, wheel 0.29, and setuptools 20.2.2.
 
 1.0.1
   * Make flake8-compliant so you can embed it without having to make exceptions

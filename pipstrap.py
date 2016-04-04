@@ -55,7 +55,7 @@ except ImportError:
     from urllib.parse import urlparse  # 3.4
 
 
-__version__ = 1, 1, 0
+__version__ = 1, 1, 1
 
 
 # wheel has a conditional dependency on argparse:
