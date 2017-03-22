@@ -21,6 +21,7 @@ anything goes wrong, it will exit with a non-zero status code.
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
 from __future__ import print_function
+from distutils.version import StrictVersion
 from hashlib import sha256
 from os.path import join
 from pipes import quote
@@ -124,6 +125,17 @@ def hashed_download(url, temp, digest):
 
 
 def main():
+    pip_location = check_output('command -v pip', shell=True).strip()
+    pip_version = check_output('pip --version', shell=True).split()[1]
+    pip_version = StrictVersion(pip_version)
+    min_pip_version = StrictVersion('8.0.3')
+
+    if pip_version >= min_pip_version:
+        print('Wants: pip>={0}'.format(min_pip_version))
+        print('Found: pip=={0} at {1}'.format(pip_version, pip_location))
+        print('The minimum desired pip version is already satisfied')
+        return 0
+
     temp = mkdtemp(prefix='pipstrap-')
     try:
         downloads = [hashed_download(url, temp, digest)
