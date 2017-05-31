@@ -57,6 +57,7 @@ except ImportError:
 
 
 __version__ = 1, 1, 1
+PIP_VERSION = '8.0.3'
 
 
 # wheel has a conditional dependency on argparse:
@@ -69,7 +70,8 @@ maybe_argparse = (
 
 PACKAGES = maybe_argparse + [
     # Pip has no dependencies, as it vendors everything:
-    ('https://pypi.python.org/packages/source/p/pip/pip-8.0.3.tar.gz',
+    ('https://pypi.python.org/packages/source/p/pip/pip-{}.tar.gz'
+     .format(PIP_VERSION),
      '30f98b66f3fe1069c529a491597d34a1c224a68640c82caf2ade5f88aa1405e8'),
     # This version of setuptools has only optional dependencies:
     ('https://pypi.python.org/packages/source/s/setuptools/'
@@ -125,15 +127,9 @@ def hashed_download(url, temp, digest):
 
 
 def main():
-    pip_location = check_output('command -v pip', shell=True).strip()
-    pip_version = check_output('pip --version', shell=True).split()[1]
-    pip_version = StrictVersion(pip_version)
-    min_pip_version = StrictVersion('8.0.3')
-
+    pip_version = StrictVersion(check_output(['pip', '--version']).split()[1])
+    min_pip_version = StrictVersion(PIP_VERSION)
     if pip_version >= min_pip_version:
-        print('Wants: pip>={0}'.format(min_pip_version))
-        print('Found: pip=={0} at {1}'.format(pip_version, pip_location))
-        print('The minimum desired pip version is already satisfied')
         return 0
 
     temp = mkdtemp(prefix='pipstrap-')
