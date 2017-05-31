@@ -19,7 +19,8 @@ Invoke it like this::
     python my-project/pipstrap.py
 
 At that point, pinned, hash-checked versions of pip, setuptools, and wheel will
-be installed.
+be installed. (If your existing version of pip was already new enough, pipstrap
+will have exited happily without doing anything.)
 
 .. note::
 
@@ -60,6 +61,9 @@ your servers, you can dispense with Pipstrap.
 
 Version History
 ===============
+
+1.2
+  * Don't do anything if the pip version is already new enough.
 
 1.1.1
   * Under Python 2.6 don't pass the CalledProcessError exception the ``output``
