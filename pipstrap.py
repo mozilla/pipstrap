@@ -62,7 +62,8 @@ PIP_VERSION = '8.0.3'
 
 # wheel has a conditional dependency on argparse:
 maybe_argparse = (
-    [('https://pypi.python.org/packages/source/a/argparse/'
+    [('https://pypi.python.org/packages/18/dd/'
+      'e617cfc3f6210ae183374cd9f6a26b20514bbb5a792af97949c5aacddf0f/'
       'argparse-1.4.0.tar.gz',
       '62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4')]
     if version_info < (2, 7, 0) else [])
@@ -70,14 +71,19 @@ maybe_argparse = (
 
 PACKAGES = maybe_argparse + [
     # Pip has no dependencies, as it vendors everything:
-    ('https://pypi.python.org/packages/source/p/pip/pip-{}.tar.gz'
+    ('https://pypi.python.org/packages/22/f3/'
+     '14bc87a4f6b5ec70b682765978a6f3105bf05b6781fa97e04d30138bd264/'
+     'pip-{}.tar.gz'
      .format(PIP_VERSION),
      '30f98b66f3fe1069c529a491597d34a1c224a68640c82caf2ade5f88aa1405e8'),
     # This version of setuptools has only optional dependencies:
-    ('https://pypi.python.org/packages/source/s/setuptools/'
+    ('https://pypi.python.org/packages/69/65/'
+     '4c544cde88d4d876cdf5cbc5f3f15d02646477756d89547e9a7ecd6afa76/'
      'setuptools-20.2.2.tar.gz',
      '24fcfc15364a9fe09a220f37d2dcedc849795e3de3e4b393ee988e66a9cbd85a'),
-    ('https://pypi.python.org/packages/source/w/wheel/wheel-0.29.0.tar.gz',
+    ('https://pypi.python.org/packages/c9/1d/'
+     'bd19e691fd4cfe908c76c429fe6e4436c9e83583c4414b54f6c85471954a/'
+     'wheel-0.29.0.tar.gz',
      '1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648')
 ]
 
