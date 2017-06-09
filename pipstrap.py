@@ -73,7 +73,7 @@ maybe_argparse = (
 PACKAGES = maybe_argparse + [
     # Pip has no dependencies, as it vendors everything:
     ('22/f3/14bc87a4f6b5ec70b682765978a6f3105bf05b6781fa97e04d30138bd264/'
-     'pip-{}.tar.gz'.format(PIP_VERSION),
+     'pip-{0}.tar.gz'.format(PIP_VERSION),
      '30f98b66f3fe1069c529a491597d34a1c224a68640c82caf2ade5f88aa1405e8'),
     # This version of setuptools has only optional dependencies:
     ('69/65/4c544cde88d4d876cdf5cbc5f3f15d02646477756d89547e9a7ecd6afa76/'
