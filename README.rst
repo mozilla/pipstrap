@@ -59,11 +59,25 @@ For how long?
 When your OS packages pip 8 or you otherwise get a copy of pip 8 you trust onto
 your servers, you can dispense with Pipstrap.
 
+What about firewalls?
+=====================
+
+If the ``PIPSTRAP_INDEX_BASE`` environment variable is set, pipstrap will look
+there for a Python package index rather than at the default location,
+https://pypi.python.org/. This lets us work behind the Great Firewall of China
+and others which block PyPI. Hash-checking should suffice for authenticity.
+
+``${PIPSTRAP_INDEX_BASE}/packages`` should exist. That is,
+``PIPSTRAP_INDEX_BASE`` should point to a location containing a ``packages``
+directory, which should mirror the one on PyPI proper. It doesn't matter
+whether you include a trailing slash in ``PIPSTRAP_INDEX_BASE``.
+
 Version History
 ===============
 
 1.2
   * Don't do anything if the pip version is already new enough.
+  * Add support for ``PIPSTRAP_INDEX_BASE``.
 
 1.1.1
   * Under Python 2.6 don't pass the CalledProcessError exception the ``output``
