@@ -62,22 +62,28 @@ your servers, you can dispense with Pipstrap.
 What about firewalls?
 =====================
 
-If the ``PIPSTRAP_INDEX_BASE`` environment variable is set, pipstrap will look
-there for a Python package index rather than at the default location,
-https://pypi.python.org/. This lets us work behind the Great Firewall of China
-and others which block PyPI. Hash-checking should suffice for authenticity.
+To use pipstrap from a machine that cannot access https://pypi.python.org/, set
+the ``PIPSTRAP_MIRRORS`` environment variable.
 
-``${PIPSTRAP_INDEX_BASE}/packages`` should exist. That is,
-``PIPSTRAP_INDEX_BASE`` should point to a location containing a ``packages``
+To try a built-in list of known mirrors, one after another until one works, set
+`PIPSTRAP_MIRRORS`` to ``yes``. pypi.python.org will be tried first, on the
+theory that it will fail fast (at DNS lookup) if blocked.
+
+To use a specific mirror, like one on your LAN, set ``PIPSTRAP_MIRRORS`` to the
+mirror's address. ``${PIPSTRAP_MIRRORS}/packages`` should exist. That is,
+``PIPSTRAP_MIRRORS`` should point to a location containing a ``packages``
 directory, which should mirror the one on PyPI proper. It doesn't matter
-whether you include a trailing slash in ``PIPSTRAP_INDEX_BASE``.
+whether ``PIPSTRAP_MIRRORS`` has a trailing slash.
+
+Trust in the mirror is not necessary, as SHA-256 hash-checking suffices to
+prove authenticity.
 
 Version History
 ===============
 
 1.2
   * Don't do anything if the pip version is already new enough.
-  * Add support for ``PIPSTRAP_INDEX_BASE``.
+  * Add support for ``PIPSTRAP_MIRRORS``.
 
 1.1.1
   * Under Python 2.6 don't pass the CalledProcessError exception the ``output``

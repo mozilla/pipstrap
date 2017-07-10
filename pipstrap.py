@@ -48,8 +48,9 @@ except ImportError:
 from sys import exit, stderr, version_info
 from tempfile import mkdtemp
 try:
-    from urllib2 import build_opener, HTTPHandler, HTTPSHandler
+    from urllib2 import build_opener, HTTPHandler, HTTPSHandler, URLError
 except ImportError:
+    from urllib.error import URLError
     from urllib.request import build_opener, HTTPHandler, HTTPSHandler
 try:
     from urlparse import urlparse
@@ -85,6 +86,16 @@ PACKAGES = maybe_argparse + [
 ]
 
 
+MIRRORS = [
+    'https://pypi.fcio.net',
+    # The rest are Chinese, because it's China who can't get to PyPI due to the
+    # Great Firewall:
+    'https://pypi.tuna.tsinghua.edu.cn',
+    'https://pypi.doubanio.com',
+    'https://mirrors.ustc.edu.cn/pypi/web'
+]
+
+
 class HashError(Exception):
     def __str__(self):
         url, path, actual, expected = self.args
@@ -100,12 +111,13 @@ def hashed_download(url, temp, digest):
     # >=2.7.9 verifies HTTPS certs itself, and, in any case, the cert
     # authenticity has only privacy (not arbitrary code execution)
     # implications, since we're checking hashes.
-    def opener():
+    def opener(using_https=True):
         opener = build_opener(HTTPSHandler())
-        # Strip out HTTPHandler to prevent MITM spoof:
-        for handler in opener.handlers:
-            if isinstance(handler, HTTPHandler):
-                opener.handlers.remove(handler)
+        if using_https:
+            # Strip out HTTPHandler to prevent MITM spoof:
+            for handler in opener.handlers:
+                if isinstance(handler, HTTPHandler):
+                    opener.handlers.remove(handler)
         return opener
 
     def read_chunks(response, chunk_size):
@@ -115,8 +127,9 @@ def hashed_download(url, temp, digest):
                 break
             yield chunk
 
-    response = opener().open(url)
-    path = join(temp, urlparse(url).path.split('/')[-1])
+    parsed_url = urlparse(url)
+    response = opener(using_https=parsed_url.scheme == 'https').open(url)
+    path = join(temp, parsed_url.path.split('/')[-1])
     actual_hash = sha256()
     with open(path, 'wb') as file:
         for chunk in read_chunks(response, 4096):
@@ -129,16 +142,36 @@ def hashed_download(url, temp, digest):
     return path
 
 
-def get_index_base():
-    """Return the URL to the dir containing the "packages" folder."""
-    base = environ.get('PIPSTRAP_INDEX_BASE', '').rstrip('/')
-    if not base:
-        return DEFAULT_INDEX_BASE
+def hashed_downloads(temp, index_bases):
+    """Download all the packages we need to install, and return paths to them.
+
+    Transparently fall back to any requested mirrors. Raise URLError if we run
+    out of mirrors and something still goes wrong with IO during the download.
+    Raise HashError if the hashes don't match.
+
+    """
+    for base in index_bases:
+        try:
+            return [hashed_download(base + '/packages/' + path,
+                                    temp,
+                                    digest)
+                         for path, digest in PACKAGES]
+        except URLError as exc:
+            # Couldn't resolve the host, hit a 404, or maybe something else
+            saved_exc = exc  # Work with py3 scoping.
+    raise saved_exc
+
+
+def get_index_bases():
+    """Return a list of URLs to requested mirrors, pointing to the dir
+    containing the "packages" folder."""
+    env_var = environ.get('PIPSTRAP_MIRRORS', '')
+    if not env_var:
+        return [DEFAULT_INDEX_BASE]
+    elif env_var == 'yes':
+        return [DEFAULT_INDEX_BASE] + MIRRORS
     else:
-        print('pipstrap is using alternative PyPI address {0} because the '
-              'environment variable PIPSTRAP_INDEX_BASE was set.'.format(base),
-              file=stderr)
-        return base
+        return [env_var.rstrip('/')]
 
 
 def main():
@@ -147,13 +180,9 @@ def main():
     if pip_version >= min_pip_version:
         return 0
 
-    index_base = get_index_base()
     temp = mkdtemp(prefix='pipstrap-')
     try:
-        downloads = [hashed_download(index_base + '/packages/' + path,
-                                     temp,
-                                     digest)
-                     for path, digest in PACKAGES]
+        downloads = hashed_downloads(temp, get_index_bases())
         check_output('pip install --no-index --no-deps -U ' +
                      ' '.join(quote(d) for d in downloads),
                      shell=True)
