@@ -66,7 +66,7 @@ To use pipstrap from a machine that cannot access https://pypi.python.org/, set
 the ``PIPSTRAP_MIRRORS`` environment variable.
 
 To try a built-in list of known mirrors, one after another until one works, set
-`PIPSTRAP_MIRRORS`` to ``yes``. pypi.python.org will be tried first, on the
+``PIPSTRAP_MIRRORS`` to ``yes``. pypi.python.org will be tried first, on the
 theory that it will fail fast (at DNS lookup) if blocked.
 
 To use a specific mirror, like one on your LAN, set ``PIPSTRAP_MIRRORS`` to the
