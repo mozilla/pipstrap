@@ -45,7 +45,7 @@ except ImportError:
                 cmd = popenargs[0]
             raise CalledProcessError(retcode, cmd)
         return output
-from sys import exit, stderr, version_info
+from sys import exit, version_info
 from tempfile import mkdtemp
 try:
     from urllib2 import build_opener, HTTPHandler, HTTPSHandler, URLError
@@ -155,7 +155,7 @@ def hashed_downloads(temp, index_bases):
             return [hashed_download(base + '/packages/' + path,
                                     temp,
                                     digest)
-                         for path, digest in PACKAGES]
+                    for path, digest in PACKAGES]
         except URLError as exc:
             # Couldn't resolve the host, hit a 404, or maybe something else
             saved_exc = exc  # Work with py3 scoping.
@@ -175,7 +175,8 @@ def get_index_bases():
 
 
 def main():
-    pip_version = StrictVersion(check_output(['pip', '--version']).decode('utf-8').split()[1])
+    pip_version = StrictVersion(check_output(['pip', '--version'])
+                                .decode('utf-8').split()[1])
     min_pip_version = StrictVersion(PIP_VERSION)
     if pip_version >= min_pip_version:
         return 0
