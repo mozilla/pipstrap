@@ -142,7 +142,7 @@ def main():
     try:
         downloads = [hashed_download(url, temp, digest)
                      for url, digest in PACKAGES]
-        check_output('pip install --no-index --no-deps -U ' +
+        check_output('pip install --no-index --no-deps --no-cache-dir -U ' +
                      ' '.join(quote(d) for d in downloads),
                      shell=True)
     except HashError as exc:
