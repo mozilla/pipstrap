@@ -133,7 +133,8 @@ def hashed_download(url, temp, digest):
 
 
 def main():
-    pip_version = StrictVersion(check_output(['pip', '--version']).split()[1])
+    pip_version = StrictVersion(check_output(['pip', '--version'])
+                                .decode('utf-8').split()[1])
     min_pip_version = StrictVersion(PIP_VERSION)
     if pip_version >= min_pip_version:
         return 0
