@@ -138,11 +138,16 @@ def main():
     if pip_version >= min_pip_version:
         return 0
 
+    # A cache that is used by default was added in pip 6.0
+    min_cache_version = StrictVersion('6.0')
+    pip_cache = pip_version >= min_cache_version
+
     temp = mkdtemp(prefix='pipstrap-')
     try:
         downloads = [hashed_download(url, temp, digest)
                      for url, digest in PACKAGES]
-        check_output('pip install --no-index --no-deps --no-cache-dir -U ' +
+        check_output('pip install --no-index --no-deps -U ' +
+                     ('--no-cache-dir ' if pip_cache else '') +
                      ' '.join(quote(d) for d in downloads),
                      shell=True)
     except HashError as exc:
