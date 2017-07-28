@@ -64,6 +64,8 @@ Version History
 
 1.2
   * Don't do anything if the pip version is already new enough.
+  * Disable the pip cache to avoid ownership warnings, which don't apply since
+    we're passing in files and not using the cache.
 
 1.1.1
   * Under Python 2.6 don't pass the CalledProcessError exception the ``output``
