@@ -62,6 +62,9 @@ your servers, you can dispense with Pipstrap.
 Version History
 ===============
 
+1.3
+  * Update pip to 9.0.1 so we can support manylinux1 wheels.
+
 1.2
   * Don't do anything if the pip version is already new enough.
   * Disable the pip cache to avoid ownership warnings, which don't apply since
