@@ -64,6 +64,7 @@ Version History
 
 1.3
   * Update pip to 9.0.1 so we can support manylinux1 wheels.
+  * Restore Python 2.6 compatibility.
 
 1.2
   * Don't do anything if the pip version is already new enough.
