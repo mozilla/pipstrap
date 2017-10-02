@@ -82,7 +82,7 @@ trailing slash.
 Version History
 ===============
 
-Unreleased
+1.4
   * Add support for PyPI mirrors.
 
 1.3
