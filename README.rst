@@ -2,7 +2,8 @@
 Pipstrap
 ========
 
-Pipstrap is a small script that acts as a trust root for installing pip 8.
+Pipstrap is a small script that acts as a trust root for installing pip 8 or
+greater.
 
 Embed this in your project, and your VCS checkout is all you have to trust. In
 a post-`peep <https://pypi.python.org/pypi/peep/>`_ era, this lets you claw
