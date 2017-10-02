@@ -58,8 +58,8 @@ except ImportError:
     from urllib.parse import urlparse  # 3.4
 
 
-__version__ = 1, 2, 0
-PIP_VERSION = '8.0.3'
+__version__ = 1, 3, 0
+PIP_VERSION = '9.0.1'
 DEFAULT_INDEX_BASE = 'https://pypi.python.org'
 
 
@@ -73,9 +73,9 @@ maybe_argparse = (
 
 PACKAGES = maybe_argparse + [
     # Pip has no dependencies, as it vendors everything:
-    ('22/f3/14bc87a4f6b5ec70b682765978a6f3105bf05b6781fa97e04d30138bd264/'
+    ('/11/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/'
      'pip-{0}.tar.gz'.format(PIP_VERSION),
-     '30f98b66f3fe1069c529a491597d34a1c224a68640c82caf2ade5f88aa1405e8'),
+     '09f243e1a7b461f654c26a725fa373211bb7ff17a9300058b205c61658ca940d'),
     # This version of setuptools has only optional dependencies:
     ('69/65/4c544cde88d4d876cdf5cbc5f3f15d02646477756d89547e9a7ecd6afa76/'
      'setuptools-20.2.2.tar.gz',
@@ -179,11 +179,15 @@ def main():
     min_pip_version = StrictVersion(PIP_VERSION)
     if pip_version >= min_pip_version:
         return 0
+    has_pip_cache = pip_version >= StrictVersion('6.0')
 
     temp = mkdtemp(prefix='pipstrap-')
     try:
         downloads = hashed_downloads(temp, get_index_bases())
         check_output('pip install --no-index --no-deps -U ' +
+                     # Disable cache since we're not using it and it otherwise
+                     # sometimes throws permission warnings:
+                     ('--no-cache-dir ' if has_pip_cache else '') +
                      ' '.join(quote(d) for d in downloads),
                      shell=True)
     except HashError as exc:

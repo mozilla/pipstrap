@@ -81,9 +81,18 @@ prove authenticity.
 Version History
 ===============
 
+Unreleased
+  * Add support for ``PIPSTRAP_MIRRORS``.
+
+1.3
+  * Update pip to 9.0.1 so we can support manylinux1 wheels.
+  * Restore Python 2.6 compatibility.
+
 1.2
   * Don't do anything if the pip version is already new enough.
-  * Add support for ``PIPSTRAP_MIRRORS``.
+  * Disable the pip cache to avoid ownership warnings, which don't apply since
+    we're passing in files and not using the cache.
+  * Fix a bytes/string mismatch under Python 3.
 
 1.1.1
   * Under Python 2.6 don't pass the CalledProcessError exception the ``output``
