@@ -87,7 +87,6 @@ PACKAGES = maybe_argparse + [
 
 
 MIRRORS = [
-    'https://pypi.fcio.net',
     # The rest are Chinese, because it's China who can't get to PyPI due to the
     # Great Firewall:
     'https://pypi.tuna.tsinghua.edu.cn',
