@@ -48,9 +48,8 @@ except ImportError:
 from sys import exit, version_info
 from tempfile import mkdtemp
 try:
-    from urllib2 import build_opener, HTTPHandler, HTTPSHandler, URLError
+    from urllib2 import build_opener, HTTPHandler, HTTPSHandler
 except ImportError:
-    from urllib.error import URLError
     from urllib.request import build_opener, HTTPHandler, HTTPSHandler
 try:
     from urlparse import urlparse
@@ -73,7 +72,7 @@ maybe_argparse = (
 
 PACKAGES = maybe_argparse + [
     # Pip has no dependencies, as it vendors everything:
-    ('/11/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/'
+    ('11/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/'
      'pip-{0}.tar.gz'.format(PIP_VERSION),
      '09f243e1a7b461f654c26a725fa373211bb7ff17a9300058b205c61658ca940d'),
     # This version of setuptools has only optional dependencies:
@@ -83,15 +82,6 @@ PACKAGES = maybe_argparse + [
     ('c9/1d/bd19e691fd4cfe908c76c429fe6e4436c9e83583c4414b54f6c85471954a/'
      'wheel-0.29.0.tar.gz',
      '1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648')
-]
-
-
-MIRRORS = [
-    # The rest are Chinese, because it's China who can't get to PyPI due to the
-    # Great Firewall:
-    'https://pypi.tuna.tsinghua.edu.cn',
-    'https://pypi.doubanio.com',
-    'https://mirrors.ustc.edu.cn/pypi/web'
 ]
 
 
@@ -141,36 +131,22 @@ def hashed_download(url, temp, digest):
     return path
 
 
-def hashed_downloads(temp, index_bases):
-    """Download all the packages we need to install, and return paths to them.
+def get_index_base():
+    """Return the URL to the dir containing the "packages" folder.
 
-    Transparently fall back to any requested mirrors. Raise URLError if we run
-    out of mirrors and something still goes wrong with IO during the download.
-    Raise HashError if the hashes don't match.
+    Try to wring something out of PIP_INDEX_URL, if set. Hack "/simple" off the
+    end if it's there; that is likely to give us the right dir.
 
     """
-    for base in index_bases:
-        try:
-            return [hashed_download(base + '/packages/' + path,
-                                    temp,
-                                    digest)
-                    for path, digest in PACKAGES]
-        except URLError as exc:
-            # Couldn't resolve the host, hit a 404, or maybe something else
-            saved_exc = exc  # Work with py3 scoping.
-    raise saved_exc
-
-
-def get_index_bases():
-    """Return a list of URLs to requested mirrors, pointing to the dir
-    containing the "packages" folder."""
-    env_var = environ.get('PIPSTRAP_MIRRORS', '')
-    if not env_var:
-        return [DEFAULT_INDEX_BASE]
-    elif env_var == 'yes':
-        return [DEFAULT_INDEX_BASE] + MIRRORS
+    env_var = environ.get('PIP_INDEX_URL', '').rstrip('/')
+    if env_var:
+        SIMPLE = '/simple'
+        if env_var.endswith(SIMPLE):
+            return env_var[:-len(SIMPLE)]
+        else:
+            return env_var
     else:
-        return [env_var.rstrip('/')]
+        return DEFAULT_INDEX_BASE
 
 
 def main():
@@ -180,10 +156,13 @@ def main():
     if pip_version >= min_pip_version:
         return 0
     has_pip_cache = pip_version >= StrictVersion('6.0')
-
+    index_base = get_index_base()
     temp = mkdtemp(prefix='pipstrap-')
     try:
-        downloads = hashed_downloads(temp, get_index_bases())
+        downloads = [hashed_download(index_base + '/packages/' + path,
+                                     temp,
+                                     digest)
+                     for path, digest in PACKAGES]
         check_output('pip install --no-index --no-deps -U ' +
                      # Disable cache since we're not using it and it otherwise
                      # sometimes throws permission warnings:

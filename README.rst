@@ -57,32 +57,32 @@ For how long?
 =============
 
 When your OS packages pip 8 or you otherwise get a copy of pip 8 you trust onto
-your servers, you can dispense with Pipstrap.
+your servers, you can dispense with pipstrap.
 
 What about firewalls?
 =====================
 
 To use pipstrap from a machine that cannot access https://pypi.python.org/, set
-the ``PIPSTRAP_MIRRORS`` environment variable.
+the ``PIP_INDEX_URL`` environment variable to point to a PyPI mirror, either
+public or internal. (See `the pip documentation on this option
+<https://pip.pypa.io/en/stable/reference/pip_wheel/#cmdoption-i>`_ for
+details.) Pipstrap needs a ``packages`` directory which is a copy of the one on
+PyPI proper, and it will look for it in 2 places:
 
-To try a built-in list of known mirrors, one after another until one works, set
-``PIPSTRAP_MIRRORS`` to ``yes``. pypi.python.org will be tried first, on the
-theory that it will fail fast (at DNS lookup) if blocked.
-
-To use a specific mirror, like one on your LAN, set ``PIPSTRAP_MIRRORS`` to the
-mirror's address. ``${PIPSTRAP_MIRRORS}/packages`` should exist. That is,
-``PIPSTRAP_MIRRORS`` should point to a location containing a ``packages``
-directory, which should mirror the one on PyPI proper. It doesn't matter
-whether ``PIPSTRAP_MIRRORS`` has a trailing slash.
+1. If ``PIP_INDEX_URL`` ends with "/simple" (as it often does in the real world
+   to satisfy pip), pipstrap will look at ``${PIP_INDEX_URL}/../packages``. In
+   other words, ``packages`` is expected to sit right next to ``simple``.
+2. Otherwise, it will look at ``${PIP_INDEX_URL}/packages``.
 
 Trust in the mirror is not necessary, as SHA-256 hash-checking suffices to
-prove authenticity.
+prove authenticity. Also, pipstrap doesn't care whether ``PIP_INDEX_URL`` has a
+trailing slash.
 
 Version History
 ===============
 
 Unreleased
-  * Add support for ``PIPSTRAP_MIRRORS``.
+  * Add support for PyPI mirrors.
 
 1.3
   * Update pip to 9.0.1 so we can support manylinux1 wheels.
