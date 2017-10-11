@@ -70,11 +70,14 @@ maybe_argparse = (
     if version_info < (2, 7, 0) else [])
 
 
-PACKAGES = maybe_argparse + [
-    # Pip has no dependencies, as it vendors everything:
+# Pip has no dependencies, as it vendors everything:
+PIP_PACKAGE = [
     ('11/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/'
      'pip-{0}.tar.gz'.format(PIP_VERSION),
-     '09f243e1a7b461f654c26a725fa373211bb7ff17a9300058b205c61658ca940d'),
+     '09f243e1a7b461f654c26a725fa373211bb7ff17a9300058b205c61658ca940d')]
+
+
+OTHER_PACKAGES = maybe_argparse + [
     # This version of setuptools has only optional dependencies:
     ('69/65/4c544cde88d4d876cdf5cbc5f3f15d02646477756d89547e9a7ecd6afa76/'
      'setuptools-20.2.2.tar.gz',
@@ -159,16 +162,21 @@ def main():
     index_base = get_index_base()
     temp = mkdtemp(prefix='pipstrap-')
     try:
-        downloads = [hashed_download(index_base + '/packages/' + path,
-                                     temp,
-                                     digest)
-                     for path, digest in PACKAGES]
-        check_output('pip install --no-index --no-deps -U ' +
-                     # Disable cache since we're not using it and it otherwise
-                     # sometimes throws permission warnings:
-                     ('--no-cache-dir ' if has_pip_cache else '') +
-                     ' '.join(quote(d) for d in downloads),
-                     shell=True)
+        # We download and install pip first, then the rest, to avoid the bug
+        # https://github.com/certbot/certbot/issues/4938.
+        pip_downloads, other_downloads = [
+            [hashed_download(index_base + '/packages/' + path,
+                             temp,
+                             digest)
+             for path, digest in packages]
+            for packages in (PIP_PACKAGE, OTHER_PACKAGES)]
+        for downloads in (pip_downloads, other_downloads):
+            check_output('pip install --no-index --no-deps -U ' +
+                         # Disable cache since we're not using it and it
+                         # otherwise sometimes throws permission warnings:
+                         ('--no-cache-dir ' if has_pip_cache else '') +
+                         ' '.join(quote(d) for d in downloads),
+                         shell=True)
     except HashError as exc:
         print(exc)
     except Exception:

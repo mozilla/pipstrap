@@ -84,6 +84,9 @@ Version History
 
 1.4
   * Add support for PyPI mirrors.
+  * Do the installation in 2 phases: first pip; then argparse, wheel, and
+    setuptools. This dodges an obscure bug:
+    https://github.com/certbot/certbot/issues/4938. (bmw)
 
 1.3
   * Update pip to 9.0.1 so we can support manylinux1 wheels.
