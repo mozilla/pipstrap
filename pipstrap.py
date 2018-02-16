@@ -79,9 +79,9 @@ PIP_PACKAGE = [
 
 OTHER_PACKAGES = maybe_argparse + [
     # This version of setuptools has only optional dependencies:
-    ('69/65/4c544cde88d4d876cdf5cbc5f3f15d02646477756d89547e9a7ecd6afa76/'
-     'setuptools-20.2.2.tar.gz',
-     '24fcfc15364a9fe09a220f37d2dcedc849795e3de3e4b393ee988e66a9cbd85a'),
+    ('59/88/2f3990916931a5de6fa9706d6d75eb32ee8b78627bb2abaab7ed9e6d0622/'
+     'setuptools-29.0.1.tar.gz',
+     'b539118819a4857378398891fa5366e090690e46b3e41421a1e07d6e9fd8feb0'),
     ('c9/1d/bd19e691fd4cfe908c76c429fe6e4436c9e83583c4414b54f6c85471954a/'
      'wheel-0.29.0.tar.gz',
      '1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648')
