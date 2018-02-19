@@ -82,6 +82,11 @@ trailing slash.
 Version History
 ===============
 
+1.5
+  * Update to setuptools 29.0.1, the newest version that doesn't drop support
+    for any Python versions. This allows use of the ``python_requires`` keyword
+    arg.
+
 1.4
   * Add support for PyPI mirrors.
   * Do the installation in 2 phases: first pip; then argparse, wheel, and
