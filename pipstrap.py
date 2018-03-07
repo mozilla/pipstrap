@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""A small script that can act as a trust root for installing pip 8
+"""A small script that can act as a trust root for installing pip >=8
 
 Embed this in your project, and your VCS checkout is all you have to trust. In
 a post-peep era, this lets you claw your way to a hash-checking version of pip,
@@ -57,7 +57,7 @@ except ImportError:
     from urllib.parse import urlparse  # 3.4
 
 
-__version__ = 1, 5, 0
+__version__ = 1, 5, 1
 PIP_VERSION = '9.0.1'
 DEFAULT_INDEX_BASE = 'https://pypi.python.org'
 

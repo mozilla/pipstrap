@@ -82,6 +82,13 @@ trailing slash.
 Version History
 ===============
 
+1.5.1
+  * Revert our 2-phase installation procedure, which was causing setuptools not
+    to be upgraded on Debian Wheezy. We now install a modern pip and setuptools
+    all in one pip invocation. (The problem the 2-phase install was meant to
+    solve has been fixed in recent versions of Ubuntu 16.04, and we don't know
+    of any other distros having the problem.)
+
 1.5
   * Update to setuptools 29.0.1, the newest version that doesn't drop support
     for any Python versions. This allows use of the ``python_requires`` keyword
