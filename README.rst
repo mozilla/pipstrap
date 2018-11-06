@@ -19,15 +19,19 @@ Invoke it like this::
     source my-virtual-env/bin/activate
     python my-project/pipstrap.py
 
+Or like this::
+
+    my-virtual-env/bin/python my-project/pipstrap.py
+
 At that point, pinned, hash-checked versions of pip, setuptools, and wheel will
 be installed. (If your existing version of pip was already new enough, pipstrap
 will have exited happily without doing anything.)
 
 .. note::
 
-    Pipstrap calls ``pip`` via the shell, so whichever environment corresponds
-    to the foremost pip on the ``$PATH`` is the one things will get installed
-    into.
+    ``pip`` is invoked as a module of the python executable that was used to
+    call pipstrap, so everything will be installed into the environment
+    associated to this specific python executable.
 
 How do I trust this?
 ====================
@@ -81,6 +85,10 @@ trailing slash.
 
 Version History
 ===============
+
+1.6
+  * Execute pip as a module from the python executable used to call pipstrap,
+    instead of resolving pip from the ``PATH``.
 
 1.5.1
   * Revert our 2-phase installation procedure, which was causing setuptools not
